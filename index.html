@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест для Тимура Ильдаровича | ИС-1.24</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #011C40 0%, #023859 100%);
+    color: #A7EBF2;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(2, 56, 89, 0.9);
+    border-radius: 20px;
+    border: 3px solid #54ACBF;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    color: #A7EBF2;
+    font-size: 2.8em;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px #26658C;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    color: #54ACBF;
+    font-size: 1.3em;
+    font-weight: 300;
+}
+
+.game-area {
+    background: rgba(1, 28, 64, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    border: 3px solid #26658C;
+    margin-bottom: 25px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.level-title {
+    color: #A7EBF2;
+    font-size: 2em;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.question {
+    font-size: 1.4em;
+    margin-bottom: 30px;
+    color: #54ACBF;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 550px;
+}
+
+.option-btn {
+    background: linear-gradient(135deg, #54ACBF 0%, #26658C 100%);
+    color: white;
+    border: none;
+    padding: 18px 30px;
+    border-radius: 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #A7EBF2;
+    font-weight: 400;
+}
+
+.option-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(167, 235, 242, 0.3);
+    background: linear-gradient(135deg, #26658C 0%, #54ACBF 100%);
+}
+
+.progress {
+    width: 100%;
+    height: 12px;
+    background: #023859;
+    border-radius: 8px;
+    margin: 25px 0;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #A7EBF2 0%, #54ACBF 100%);
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+.level-counter {
+    color: #54ACBF;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: 300;
+}
+
+.funny-message {
+    color: #A7EBF2;
+    font-style: italic;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(84, 172, 191, 0.15);
+    border-radius: 12px;
+    border-left: 4px solid #A7EBF2;
+    max-width: 600px;
+}
+
+.hidden {
+    display: none;
+}
+
+.student-comment {
+    font-size: 1em;
+    color: #A7EBF2;
+    margin-top: 15px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* Стили для игры "Поймай студента" */
+.catch-game-area {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    border: 3px solid #54ACBF;
+    border-radius: 15px;
+    background: rgba(2, 56, 89, 0.7);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.running-student {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #A7EBF2 0%, #54ACBF 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 3px solid #26658C;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.running-student:hover {
+    transform: scale(1.1);
+}
+
+.timer {
+    font-size: 2em;
+    color: #A7EBF2;
+    margin: 20px 0;
+    font-weight: 300;
+}
+
+.catch-counter {
+    font-size: 1.3em;
+    color: #54ACBF;
+    margin-bottom: 15px;
+}
+
+/* Стили для игры "Память куратора" */
+.memory-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 30px 0;
+    max-width: 700px;
+}
+
+.student-card {
+    background: linear-gradient(135deg, #26658C 0%, #023859 100%);
+    padding: 25px;
+    border-radius: 15px;
+    border: 3px solid #54ACBF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(167, 235, 242, 0.2);
+    border-color: #A7EBF2;
+}
+
+.student-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #A7EBF2;
+    background: linear-gradient(135deg, #54ACBF 0%, #26658C 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #A7EBF2 0%, #54ACBF 100%);
+    color: #011C40;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.student-name {
+    font-size: 1.3em;
+    color: #A7EBF2;
+    font-weight: 500;
+}
+
+.student-description {
+    font-size: 0.9em;
+    color: #54ACBF;
+    margin-top: 8px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.final-message {
+    background: rgba(2, 56, 89, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    border: 3px solid #A7EBF2;
+    margin-top: 30px;
+    box-shadow: 0 8px 32px rgba(167, 235, 242, 0.2);
+}
+
+.final-title {
+    color: #A7EBF2;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.final-text {
+    color: #54ACBF;
+    font-size: 1.4em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.signature {
+    color: #A7EBF2;
+    font-size: 1.3em;
+    margin-top: 30px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.confetti {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: #A7EBF2;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+        </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Мини-квест Куратору</h1>
+            <div class="subtitle">ИС-1.24 | Посвящается Тимуру Ильдаровичу</div>
+        </div>
+
+        <div class="level-counter">Уровень: <span id="currentLevel">1</span>/10</div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <!-- Игра будет здесь -->
+        </div>
+
+        <div id="finalSection" class="hidden">
+            <div class="final-message">
+                <div class="final-title"> Миссия выполнена! </div>
+                <div class="final-text">
+                    Дорогой Тимур Ильдарович!<br><br>
+                    Поздравляем Вас с Днем учителя!<br>
+                    Спасибо за Ваше терпение, мудрость и поддержку.<br>
+                    Надеемся, в будущем вы станете нам не просто куратором, а настоящим наставником!<br><br>
+                    Желаем Вас вдохновения, успехов в работе<br>и терпения с нашей группой! 💖
+
+                </div>
+                <div class="signature">За успешно пройденную игру, вам доступен подарок!<br>
+    <div style="text-align: center; margin: 20px 0;">
+        <button class="get-certificate-btn" onclick="window.open('gifts.html', '_blank')">
+            ПОЛУЧИТЬ
+        </button>
+    </div>
+    С любовью и уважением, ваши ИСочки 1.24
+</div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .get-certificate-btn {
+    background: linear-gradient(135deg, #26658C 0%, #023859 100%);
+    color: #A7EBF2;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid #54ACBF;
+    box-shadow: 0 6px 20px rgba(84, 172, 191, 0.6);
+    margin: 10px 0;
+}
+
+.get-certificate-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(167, 235, 242, 0.8);
+    background: linear-gradient(135deg, #023859 0%, #26658C 100%);
+    color: #A7EBF2;
+}
+    </style>
+    <script>
+        // Данные игры
+        const gameLevels = [
+            // Уровни 1-5: Оригинальные ситуации
+            {
+                type: 'question',
+                title: "📚 Первая пара у группы",
+                question: "Студенты опоздали на пару. Ваши действия?",
+                options: [
+                    "Строгий взгляд и замечание в журнал",
+                    "Шутка про будильник и начало урока",
+                    "Предложить кофе всем опоздавшим",
+                    "Дежурить!"
+                ],
+                correct: 1,
+                funny: "ИС-1.24 шепчет: 'хороший сон == хорошая работа!' 😄"
+            },
+            {
+                type: 'question',
+                title: "💻 Технические неполадки",
+                question: "Не работает проектор в аудитории. Ваши действия?",
+                options: [
+                    "Перенос пары на завтра",
+                    "Объяснять на пальцах",
+                    "Студенческий совет по починке",
+                    "Магия и заклинания"
+                ],
+                correct: 2,
+                funny: "Студент-техник уже бежит с отверткой! 🔧"
+            },
+            {
+                type: 'question',
+                title: "🍕 Обеденный перерыв",
+                question: "Студенты голодные, а до конца пары 30 минут...",
+                options: [
+                    "Строго по расписанию!",
+                    "Рассказать про пиццу в учебнике",
+                    "Устроить мозговой штурм над пиццей",
+                    "Экспресс-завтрак за 10 минут"
+                ],
+                correct: 3,
+                funny: "Бежим в буфет! 🍕"
+            },
+            {
+                type: 'question',
+                title: "📝 Сложная контрольная",
+                question: "Студенты не понимают задание. Поможете?",
+                options: [
+                    "Самостоятельная работа!",
+                    "Подсказка в стиле 'подумайте еще'",
+                    "Разбор на доске для всех",
+                    "Секретные знания куратора"
+                ],
+                correct: 2,
+                funny: "Мы верим в ваши силы! 💪"
+            },
+            {
+                type: 'question',
+                title: "🎉 Внеучебные мероприятия",
+                question: "Предложите идею для сплочения группы",
+                options: [
+                    "Дополнительные пары",
+                    "Квест по программированию",
+                    "Пицца-пати в общаге",
+                    "Экскурсия на IT-предприятие"
+                ],
+                correct: 3,
+                funny: "Пицца + код = идеальная формула! 🧮"
+            },
+            // Уровни 6-7: Поймай студента
+            {
+                type: 'catch',
+                title: "🏃‍♂️ Поймайте убегающего студента",
+                question: "Верните студентов на пару! Кликайте на убегающих!",
+                target: 5,
+                time: 30
+            },
+            {
+                type: 'catch',
+                title: "🚨 Срочная эвакуация из столовой",
+                question: "Студенты застряли в буфете! Верните их быстрее!",
+                target: 6,
+                time: 25
+            },
+            // Уровни 8-10: Память куратора
+            {
+                type: 'memory',
+                title: "🌟 Память куратора", 
+                question: "Староста группы?!",
+                cards: [
+                    { 
+                        name: "Аминка", 
+                        description: "Знает ответы на все вопросы", 
+                        correct: true,
+                        photo: "1.jpg"
+                    },
+                    { 
+                        name: "Вика", 
+                        description: "Таролог группы",
+                        photo: "3.jpg"
+                    },
+                    { 
+                        name: "Рамиска", 
+                        description: "Спорт группы",
+                        photo: "2.jpg"
+                    }
+                ]
+            },
+            {
+            type: 'question', 
+            title: "💤 Сонный студент на паре",
+            question: "Студент крепко спит на задней парте. Что делаете?",
+            options: [
+                "Громко вызвать к доске",
+                "Тихо подойти и предложить кофе",
+                "Сделать вид, что не заметили",
+                "Рассказать шутку про сон"
+            ],
+            correct: 1,
+            funny: "Студент просыпается: 'Я просто медитировал над кодом!' 😴"  
+            },
+            {
+            type: 'question',
+            title: "🎊 День рождения студента",
+            question: "Студент принес торт на свой день рождения в универ. Ваши действия?",
+            options: [
+                "Перенести пару и устроить праздник",
+                "Съесть торт за 5 минут и продолжить урок", 
+                "Устроить мозговой штурм над тортом",
+                "Отложить до конца пары и поздравить"
+            ],
+            correct: 3,
+            funny: "ИС-1.24 шепчет: 'Торт с алгоритмами - вкуснее!' 🎂"
+            }                
+            
+        ];
+        
+
+
+        let currentLevel = 0;
+        let catchCount = 0;
+        let gameTimer;
+        const progressBar = document.getElementById('progressBar');
+        const currentLevelSpan = document.getElementById('currentLevel');
+        const gameArea = document.getElementById('gameArea');
+        const finalSection = document.getElementById('finalSection');
+
+        // Запуск игры
+        function startGame() {
+            showLevel(currentLevel);
+        }
+
+        // Показать уровень
+        function showLevel(levelIndex) {
+            const level = gameLevels[levelIndex];
+            currentLevelSpan.textContent = levelIndex + 1;
+            progressBar.style.width = `${(levelIndex + 1) * 10}%`;
+
+            if (level.type === 'question') {
+                showQuestionLevel(level);
+            } else if (level.type === 'catch') {
+                showCatchLevel(level);
+            } else if (level.type === 'memory') {
+                showMemoryLevel(level);
+            }
+        }
+
+        // Показать вопрос-уровень
+        function showQuestionLevel(level) {
+            gameArea.innerHTML = `
+                <div class="level-title">${level.title}</div>
+                <div class="question">${level.question}</div>
+                <div class="options">
+                    ${level.options.map((option, index) => `
+                        <button class="option-btn" onclick="handleAnswer(${index})">
+                            ${option}
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="student-comment">${level.funny}</div>
+            `;
+        }
+
+        // Показать игру "Поймай студента"
+        function showCatchLevel(level) {
+            catchCount = 0;
+            gameArea.innerHTML = `
+                <div class="level-title">${level.title}</div>
+                <div class="question">${level.question}</div>
+                <div class="catch-counter">Поймано: ${catchCount}/${level.target}</div>
+                <div class="timer" id="timer">${level.time}</div>
+                <div class="catch-game-area" id="catchArea"></div>
+                <div class="student-comment">Кликай на студентов, чтобы вернуть их на пару! 🏃‍♂️💨</div>
+            `;
+
+            startCatchGame(level);
+        }
+
+        // Показать игру "Память куратора"
+        function showMemoryLevel(level) {
+            gameArea.innerHTML = `
+                <div class="level-title">${level.title}</div>
+                <div class="question">${level.question}</div>
+                <div class="memory-cards">
+                    ${level.cards.map((card, index) => `
+                        <div class="student-card" onclick="handleMemoryAnswer(${index})">
+                            <div class="student-avatar">
+                                <img src="${card.photo}" alt="${card.name}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            </div>
+                            <div class="student-name">${card.name}</div>
+                            <div class="student-description">${card.description}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="student-comment">Проверяем, насколько хорошо вы запомнили группу! 👥</div>
+            `;
+        }
+
+        // Обработка ответа на вопрос
+        function handleAnswer(selectedIndex) {
+            const level = gameLevels[currentLevel];
+            createConfetti();
+            
+            gameArea.innerHTML += `
+                <div class="funny-message">
+                    ✅ Отлично! ${level.funny}
+                </div>
+            `;
+
+            setTimeout(() => {
+                nextLevel();
+            }, 2000);
+        }
+
+        // Обработка ответа в игре памяти
+        function handleMemoryAnswer(selectedIndex) {
+            const level = gameLevels[currentLevel];
+            const isCorrect = level.cards[selectedIndex].correct;
+            
+            createConfetti();
+            
+            if (isCorrect) {
+                gameArea.innerHTML += `
+                    <div class="funny-message">
+                        ✅ Верно! Вы отлично знаете нашу группу! 👏
+                    </div>
+                `;
+            } else {
+                gameArea.innerHTML += `
+                    <div class="funny-message">
+                        😄 Почти угадали! Но правильный ответ - ${level.cards.find(card => card.correct).name}!
+                    </div>
+                `;
+            }
+
+            setTimeout(() => {
+                nextLevel();
+            }, 4000);
+        }
+
+        // Запуск игры "Поймай студента"
+        function startCatchGame(level) {
+            const catchArea = document.getElementById('catchArea');
+            const timerElement = document.getElementById('timer');
+            let timeLeft = level.time;
+            let students = [];
+
+            // Создаем студентов
+            function createStudent() {
+                if (students.length < 8) {
+                    const student = document.createElement('div');
+                    student.className = 'running-student';
+                    student.innerHTML = '👨‍🎓';
+                    student.style.left = Math.random() * (catchArea.offsetWidth - 80) + 'px';
+                    student.style.top = Math.random() * (catchArea.offsetHeight - 80) + 'px';
+                    
+                    student.onclick = function() {
+                        catchCount++;
+                        document.querySelector('.catch-counter').textContent = `Поймано: ${catchCount}/${level.target}`;
+                        
+                        // Смешные фразы при поимке
+                        const phrases = [
+                            "Ладно, возвращаюсь на пару!",
+                            "Я просто за кофе бегал!",
+                            "Принтер опять барахлит...",
+                            "Это не побег, это разведка!",
+                            "Уже бегу обратно!",
+                            "Хорошо, хорошо, иду!",
+                            "Я библиотеку искал!",
+                            "Просто воздухом подышал!"
+                        ];
+                        
+                        student.innerHTML = `💨<br><small>${phrases[Math.floor(Math.random() * phrases.length)]}</small>`;
+                        student.style.background = 'linear-gradient(135deg, #26658C 0%, #023859 100%)';
+                        
+                        setTimeout(() => {
+                            student.remove();
+                            students = students.filter(s => s !== student);
+                        }, 1000);
+                        
+                        if (catchCount >= level.target) {
+                            clearInterval(gameTimer);
+                            setTimeout(() => {
+                                gameArea.innerHTML += `<div class="funny-message">🎉 Успех! Все студенты вернулись на пару!</div>`;
+                                setTimeout(nextLevel, 2000);
+                            }, 500);
+                        }
+                    };
+                    
+                    catchArea.appendChild(student);
+                    students.push(student);
+                }
+            }
+
+            // Таймер игры
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(gameTimer);
+                    gameArea.innerHTML += `<div class="funny-message">⏰ Время вышло! Но вы справились!</div>`;
+                    setTimeout(nextLevel, 2000);
+                }
+            }, 1000);
+
+            // Создаем новых студентов каждые 1.5 секунды
+            setInterval(createStudent, 1500);
+
+            // Двигаем студентов
+            setInterval(() => {
+                students.forEach(student => {
+                    if (student.parentNode) {
+                        const newX = Math.random() * (catchArea.offsetWidth - 80);
+                        const newY = Math.random() * (catchArea.offsetHeight - 80);
+                        student.style.transition = 'all 1s ease';
+                        student.style.left = newX + 'px';
+                        student.style.top = newY + 'px';
+                    }
+                });
+            }, 2000);
+        }
+
+        // Переход на следующий уровень
+        function nextLevel() {
+            currentLevel++;
+            if (currentLevel < gameLevels.length) {
+                showLevel(currentLevel);
+            } else {
+                finishGame();
+            }
+        }
+
+        // Завершение игры
+        // Завершение игры
+function finishGame() {
+    gameArea.classList.add('hidden');
+    finalSection.classList.remove('hidden');
+    createConfetti();
+    
+    
+}
+
+        // Создание конфетти
+        function createConfetti() {
+            const colors = ['#A7EBF2', '#54ACBF', '#26658C', '#023859'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Запускаем игру при загрузке
+        startGame();
+    </script>
+</body>
+</html>
